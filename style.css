@@ -1,4 +1,3 @@
-
 .heading
 {
     width: 100%;
@@ -41,5 +40,9 @@ canvas{
     border-color: white;
     border-radius: 20px;
     box-shadow: 5px, 5px, 5px, white;
+}
+
+.restart{
+    size: 13px;
 }
   
