@@ -1,4 +1,3 @@
-
 /*creado por prashant shukla */
 
 var paddle2 =10,paddle1=10;
@@ -36,8 +35,9 @@ function setup(){
 function gotPoses(results){
   if(results.lenght>0){
     console.log(results);
+    rightwristX=results[0].pose.rightWrist.x;
 		rightwristY=results[0].pose.rightWrist.y;
-		console.log("rightwristY="+rightristY);
+		console.log("rightwristY="+rightristY+ ",rightwristX="+rightristX);
   }
 }
 
@@ -49,7 +49,9 @@ function draw(){
  image(video,0,0,700,600);
 
  if(rightwristY>0.2){
-
+  fill("red");
+  stroke("red");
+  circle(rightwristX, rightwristY, 2);
  }
 
 
