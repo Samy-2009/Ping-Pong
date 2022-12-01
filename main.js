@@ -30,13 +30,28 @@ function setup(){
   video.hide();
 
   poseNet=ml5.poseNet(video,modelLoaded);
+  poseNet.on("poses", gotPoses);
+}
+
+function gotPoses(results){
+  if(results.lenght>0){
+    console.log(results);
+		rightwristY=results[0].pose.rightWrist.y;
+		console.log("rightwristY="+rightristY);
+  }
 }
 
 
 function draw(){
 
+
  background(0); 
  image(video,0,0,700,600);
+
+ if(rightwristY>0.2){
+
+ }
+
 
  fill("black");
  stroke("black");
