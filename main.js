@@ -1,3 +1,7 @@
+rightwristX="";
+rightwristY="";
+
+game_status= "";
 /*creado por prashant shukla */
 
 var paddle2 =10,paddle1=10;
@@ -31,65 +35,86 @@ function setup(){
   poseNet=ml5.poseNet(video,modelLoaded);
   poseNet.on("poses", gotPoses);
 }
+function modelLoaded(){
+  console.log("Modelo Cargado");
+}
 
 function gotPoses(results){
-  if(results.lenght>0){
+  if(results.length>0){
     console.log(results);
     rightwristX=results[0].pose.rightWrist.x;
 		rightwristY=results[0].pose.rightWrist.y;
-		console.log("rightwristY="+rightristY+ ",rightwristX="+rightristX);
+
+		console.log("rightwristY="+rightwristY+ ",rightwristX="+rightwristX);
   }
 }
 
+function preload(){
+  ball_touch = loadSound("ball_touch_paddel.wav");
+  missed = loadSound("missed.wav");
+}
+
+function startGame(){
+  game_status = "start";
+  document.getElementById("status").innerHTML = "El juego se ha cargado";
+}
+
+function restart(){
+  pcscore = 0;
+  playerscore = 0;
+  loop();
+}
 
 function draw(){
-
-
- background(0); 
- image(video,0,0,700,600);
-
- if(rightwristY>0.2){
-  fill("red");
-  stroke("red");
-  circle(rightwristX, rightwristY, 2);
- }
-
-
- fill("black");
- stroke("black");
- rect(680,0,20,700);
-
- fill("black");
- stroke("black");
- rect(0,0,20,700);
- 
-   //llamar función paddleInCanvas  
-   paddleInCanvas();
- 
-   //paleta izquierda
-   fill(250,0,0);
-    stroke(0,0,250);
-    strokeWeight(0.5);
-   paddle1Y = mouseY; 
-   rect(paddle1X,paddle1Y,paddle1,paddle1Height,100);
+  if (game_status == "start"){
+    background(0); 
+    image(video,0,0,700,600);
+   
+    if(rightwristY>0.2){
+     fill("red");
+     stroke("red");
+     circle(rightwristX, rightwristY, 30);
+    }
    
    
-    //paleta de la computadora
-    fill("#FFA500");
-    stroke("#FFA500");
-   var paddle2y =ball.y-paddle2Height/2;  rect(paddle2Y,paddle2y,paddle2,paddle2Height,100);
+    fill("black");
+    stroke("black");
+    rect(680,0,20,700);
+   
+    fill("black");
+    stroke("black");
+    rect(0,0,20,700);
+
     
-    //llamar a la función midline 
-    midline();
     
-    //llamar a la función drawScore  
-   drawScore();
-   
-   //llamar a la función models   
-   models();
-   
-   //llamar a la función move que es muy importante
-    move();
+      //llamar función paddleInCanvas  
+      paddleInCanvas();
+    
+      //paleta izquierda
+      fill(250,0,0);
+       stroke(0,0,250);
+       strokeWeight(0.5);
+      paddle1Y = rightwristX; 
+      rect(paddle1X,paddle1Y,paddle1,paddle1Height,100);
+      
+      
+       //paleta de la computadora
+       fill("#FFA500");
+       stroke("#FFA500");
+      var paddle2y =ball.y-paddle2Height/2;  rect(paddle2Y,paddle2y,paddle2,paddle2Height,100);
+       
+       //llamar a la función midline 
+       midline();
+       
+       //llamar a la función drawScore  
+      drawScore();
+      
+      //llamar a la función models   
+      models();
+      
+      //llamar a la función move que es muy importante
+       move();
+  }
 }
 
 
@@ -141,10 +166,12 @@ function move(){
    }
   if (ball.x-2.5*ball.r/2< 0){
   if (ball.y >= paddle1Y&& ball.y <= paddle1Y + paddle1Height) {
+    ball_touch.play();
     ball.dx = -ball.dx+0.5;
     playerscore++;
   }
   else{
+    missed.play();
     pcscore++;
     reset();
     navigator.vibrate(100);
@@ -158,7 +185,7 @@ if(pcscore ==4){
     stroke("white");
     textSize(25)
     text("¡Fin del juego!☹☹",width/2,height/2);
-    text("¡Volver a cargar la página!",width/2,height/2+30)
+    text("¡Presiona el boton Reinicio para jugar de nuevo!",width/2,height/2+30)
     noLoop();
     pcscore = 0;
 }
