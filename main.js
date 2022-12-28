@@ -32,8 +32,8 @@ function setup(){
 	video.size(700,600);
   video.hide();
 
-  poseNet=ml5.poseNet(video,modelLoaded);
-  poseNet.on("poses", gotPoses);
+	poseNet=ml5.poseNet(video,modelLoaded);
+	poseNet.on("pose", gotPoses);
 }
 function modelLoaded(){
   console.log("Modelo Cargado");
@@ -73,7 +73,7 @@ function draw(){
     if(rightwristY>0.2){
      fill("red");
      stroke("red");
-     circle(rightwristX, rightwristY, 30);
+     circle(rightwristX, rightwristY, 5);
     }
    
    
